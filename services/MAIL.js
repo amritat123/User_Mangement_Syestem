@@ -27,6 +27,8 @@ module.exports.sendMail = async (params) => {
 };
 
 
+
+
 module.exports.forgotPassword = async (params) => {
   try {
     let info = await transporter.sendMail({

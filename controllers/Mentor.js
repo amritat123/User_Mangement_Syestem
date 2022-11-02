@@ -1,17 +1,14 @@
 const { encrypt, compare } = require('../services/crypto');
 const { sendMail } = require('../services/MAIL');
-const User = require('../models/User');
+const Mentor = require('../models/mentor');
 const { generateJwtToken } = require('./middlewares/auth');
 
 
-
-
-
-module.exports.signUp = async (req, res) => {
+const signUp = async (req, res) => {
   try {
     const { first_Name, last_Name, Email, password, confirmPassword } = req.body;
 
-    let Existing = await User.findOne({ Email:Email })
+    let Existing = await Mentor.findOne({ Email:Email })
 
 
     if (Existing) return res.status(400).json({
@@ -26,7 +23,7 @@ module.exports.signUp = async (req, res) => {
     const otpGenerated = Math.floor(100000 + Math.random() * 900000)
 
 
-    let newUser = await User.create({
+    let newUser = await Mentor.create({
       first_Name,
       last_Name,
       Email,
@@ -37,6 +34,7 @@ module.exports.signUp = async (req, res) => {
     if (!newUser) return res.status(400).json({
       message: 'Unable to create new user',
     });
+
     let mail = await sendMail({
       to: Email,
       OTP: otpGenerated,
@@ -52,7 +50,6 @@ module.exports.signUp = async (req, res) => {
     });
   }
 
-
 };
 
 
@@ -60,7 +57,7 @@ module.exports.signUp = async (req, res) => {
 
 //login ------
 
-module.exports.login = async (req, res) => {
+const login = async (req, res) => {
 
   try {
     const { Email, password } = req.body;
@@ -68,7 +65,7 @@ module.exports.login = async (req, res) => {
     if (!(Email && password)) return res.status(400).json({ message: "All input is required" });
 
 
-    let Existing = await User.findOne({ Email })
+    let Existing = await Mentor.findOne({ Email })
 
     if (!Existing) return res.status(400).json({ message: 'No User existing' });
 
@@ -89,25 +86,18 @@ module.exports.login = async (req, res) => {
 
 };
 
-
-
-
-
-
-
 // Verify
-module.exports.verify_OTP = async (req, res) => {
+const verify_OTP = async (req, res) => {
   try {
     const { Email, otp } = req.body;
 
-    let Existing = await User.findOne({ Email })
+    let Existing = await Mentor.findOne({ Email })
 
     if (!Existing) return res.status(400).json({ message: 'User not found' });
 
     if (Existing && Existing.otp !== otp) return res.status(400).json({ message: 'Invalid OTP' });
 
-    const updatedUser = await User.findByIdAndUpdate(Existing._id, { $set: { active: true } });
-
+    const updatedUser = await Mentor.findByIdAndUpdate(Existing._id, { $set: { active: true } });
 
     let token = generateJwtToken(Existing)
 
@@ -119,30 +109,21 @@ module.exports.verify_OTP = async (req, res) => {
 
 };
 
-
-
-
-
-
-
-
-
-
 //Reset Password
-module.exports.RestPasswordsendOTP = async (req, res) => {
+const RestPasswordsendOTP = async (req, res) => {
   try {
 
     const { Email } = req.body;
 
     // Check if user already exist
-    let Existing = await User.findOne({ Email: Email })
+    let Existing = await Mentor.findOne({ Email: Email })
 
     if (!Existing) return res.status(400).json({ message: 'User not found' });
 
 
     const otpGenerated = Math.floor(100000 + Math.random() * 900000)
 
-    const updatedUser = await User.findByIdAndUpdate(Existing._id, {
+    const updatedUser = await Mentor.findByIdAndUpdate(Existing._id, {
       $set: { otp: otpGenerated },
     });
 
@@ -160,18 +141,12 @@ module.exports.RestPasswordsendOTP = async (req, res) => {
 
 };
 
-
-
-
-
-
-
 //.RestPasswordOtp
-module.exports.RestPasswordOtp = async (req, res) => {
+const RestPasswordOtp = async (req, res) => {
  try {
    const { otp, Email } = req.body;
 
-   let Existing = await User.findOne({ Email })
+   let Existing = await Mentor.findOne({ Email })
    if (!Existing) return res.status(400).json({ message: 'User not found' });
 
    if (Existing.otp == otp) {
@@ -188,19 +163,16 @@ module.exports.RestPasswordOtp = async (req, res) => {
  }
 };
 
-
-
 //RestPasswordLink ---
-
-module.exports.RestPassword = async (req, res) => {
+const RestPassword = async (req, res) => {
 try {
   const { password, Email } = req.body;
 
-  let Existing = await User.findOne({ Email })
+  let Existing = await Mentor.findOne({ Email })
   if (!Existing) return res.status(400).json({ message: 'User not found' });
 
   const hashedPassword = await encrypt(password);
-  const updatedUser = await User.findByIdAndUpdate(Existing._id, {
+  const updatedUser = await Mentor.findByIdAndUpdate(Existing._id, {
     $set: { password: hashedPassword },
   });
 
@@ -219,3 +191,13 @@ try {
 
 };
 
+
+module.exports= {
+
+  RestPassword,
+  RestPasswordOtp,
+  RestPasswordsendOTP,
+  verify_OTP,
+  login,
+  signUp
+}

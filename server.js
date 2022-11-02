@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const mongoose = require('mongoose');
+const course = require('./routes/CourseType')
+const mentorOnboard = require('./routes/MentorOnboard')
+const MentorProfiles = require('./routes/MentorProfile')
 require('dotenv').config();
 
 
@@ -14,8 +17,10 @@ const PORT=process.env.PORT || 5000
 const DB_URI=process.env.DB_URI
 
 
-
-app.use('/', require('./routes/UserRoutes'));
+app.use('/', require('./routes/Mentor'));
+app.use('/Course', course)
+app.use('/Onboard', mentorOnboard)
+app.use('/profiles', MentorProfiles)
 
 
 const Main = async () => {
@@ -31,6 +36,7 @@ const Main = async () => {
     console.log(error);
   }
 };
+
 
 Main();
 

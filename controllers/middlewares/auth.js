@@ -4,8 +4,6 @@ const JWTkey = process.env.TOKEN_KEY
 
 
 
-
-
 module.exports.generateJwtToken = (user) => {
   return jwt.sign({ user }, JWTkey, {
     expiresIn: "7d",
