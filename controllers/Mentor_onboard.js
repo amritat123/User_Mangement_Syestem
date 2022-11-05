@@ -36,8 +36,8 @@ const postMentorOnboard = async (req, res) => {
     }
 }
 
-//GetAPI
 
+//GetAPI
 const GetMentorOnboard= async (req, res) => {
     try {
         const getMentorOnboard = await Onboard.find();

@@ -24,6 +24,7 @@
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.16",
     "otp-generator": "^4.0.0",
+    "socket.io": "^4.5.3",
     "twilio": "^3.78.0"
   }
 }

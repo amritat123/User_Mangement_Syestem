@@ -69,8 +69,7 @@ const postMentorProfiles = async (req, res) => {
                 Intro_Video,
                 Mentor_Profiles:path,
                 
-
-
+            
             });
             if (!getResponce) {
                 res
