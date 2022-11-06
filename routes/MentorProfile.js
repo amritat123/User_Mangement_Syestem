@@ -2,6 +2,7 @@ const { postMentorProfiles } = require("../controllers/MentorProfiles");
 
 const router = require("express").Router();
 
+const { isAuthenticated } = require("../controllers/middlewares/auth");
 
 const path = require("path");
 var multer = require("multer");
@@ -16,7 +17,9 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-router.post('/mentorprofiles', upload.single("myField"), postMentorProfiles)
+router.post('/mentorprofiles', upload.single("myField"), isAuthenticated, postMentorProfiles)
+
+
 
 
 // const auth = require("..middleware/authentication");

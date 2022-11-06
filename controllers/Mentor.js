@@ -1,7 +1,19 @@
 const { encrypt, compare } = require('../services/crypto');
 const { sendMail } = require('../services/MAIL');
 const Mentor = require('../models/mentor');
-const { generateJwtToken } = require('./middlewares/auth');
+// const { generateJwtToken } = require('./middlewares/auth');
+
+const jwt = require("jsonwebtoken");
+const JWTkey = process.env.TOKEN_KEY;
+// const dotenv = require(')
+require("dotenv")
+
+
+const generateJwtToken = (user) => {
+  return jwt.sign({ user }, JWTkey, {
+    expiresIn: "7d",
+  });
+};
 
 
 const signUp = async (req, res) => {
@@ -199,5 +211,6 @@ module.exports= {
   RestPasswordsendOTP,
   verify_OTP,
   login,
-  signUp
+  signUp,
+ 
 }

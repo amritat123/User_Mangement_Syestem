@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const MessageSchema = new mongoose.Schema({
   content: String,
-  from: String,
+  from: Object,
   time: String,
   date: String,
   to: String

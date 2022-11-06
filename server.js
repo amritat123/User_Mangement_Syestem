@@ -30,7 +30,7 @@ app.use('/Course', course)
 app.use('/Onboard', mentorOnboard)
 app.use('/profiles', MentorProfiles)
 app.use('/Subject', AnySubject)
-app.use('/student',ListStudent)
+app.use('/student', ListStudent)
 
 
 const server = require('http').createServer(app);
@@ -75,6 +75,7 @@ io.on("connection", (socket) => {
   });
 
 
+  //
   socket.on("join-room", async (newRoom, previousRoom) => {
     socket.join(newRoom);
     socket.leave(previousRoom);
@@ -97,11 +98,11 @@ io.on("connection", (socket) => {
     let roomMessages = await getLastMessagesFromRoom(room);
     roomMessages = sortRoomMessagesByDate(roomMessages);
     // sending message to room
-    io.to(room).emit("room-messages", roomMessages);
+    socket.emit("room-messages", roomMessages);
     socket.broadcast.emit("notifications", room);
   });
 
- 
+
 });
 
 

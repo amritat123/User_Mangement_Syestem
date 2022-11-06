@@ -43,6 +43,8 @@ const postMentorProfiles = async (req, res) => {
     // photo['blog_Images'] = req.file.originalname
 
     let { AboutYou, AgeGroups, Courses, Intro_Video } = req.body;
+    // console.log(req.user.user._id)
+    let userId = req.user
 
     console.log(req.file)
     const path = req.file.destination + "/" + req.file.originalname
@@ -50,45 +52,72 @@ const postMentorProfiles = async (req, res) => {
     if (!path) throw new Error('no  images file')
 
     console.log(path)
-
     try {
         if (!(AboutYou && AgeGroups && Courses && Intro_Video)) {
             res.status(400).json({ message: "All fields are required", status: false });
 
         } else {
-            // if ((AgeGroups > 4) && (AgeGroups<=99)){
-            //     res.status(200).json({message:"AgeGroupe Is right",status:true})
-            // }
-            // else{
-            //     res.status(400).json({message:"AgeGroups is Over",status:false})
-            // }
-            const getResponce = await MentorProfiles.create({
-                AboutYou,
-                AgeGroups,
-                Courses,
-                Intro_Video,
-                Mentor_Profiles:path,
-                
-            
-            });
-            if (!getResponce) {
-                res
-                    .status(400)
-                    .json({ message: "Mentor Profiles  not  Has Posted", status: false });
-            } else {
-                res.status(200).json({
-                    message: "Mentor Profiles   is  created successfully",
-                    data: getResponce,
-                    status: true,
-                });
+            if ((AgeGroups > 4) && (AgeGroups <= 99)) {
+                let Existing = await MentorProfiles.findOne({ userId })
+
+                if (Existing) {
+
+                    let getResponce = await MentorProfiles.findOneAndUpdate({ userId }, {
+                        AboutYou,
+                        AgeGroups,
+                        Courses,
+                        Intro_Video,
+                        Mentor_Profiles: path,
+                        userId
+
+                    });
+                    if (!getResponce) {
+                        res
+                            .status(400)
+                            .json({ message: "Mentor Profiles not updated ", status: false });
+                    } else {
+                        res.status(200).json({
+                            message: "Mentor Profiles is Updated successfully",
+                            data: getResponce,
+                            status: true,
+                        });
+                    }
+
+                } else {
+
+                    let getResponce = await MentorProfiles.create({
+                        AboutYou,
+                        AgeGroups,
+                        Courses,
+                        Intro_Video,
+                        Mentor_Profiles: path,
+                        userId
+
+                    });
+                    if (!getResponce) {
+                        res
+                            .status(400)
+                            .json({ message: "Mentor Profiles not Created", status: false });
+                    } else {
+                        res.status(200).json({
+                            message: "Mentor Profiles is created successfully",
+                            data: getResponce,
+                            status: true,
+                        });
+                    }
+
+                }
+
+
+            }
+            else {
+                res.status(400).json({ message: "AgeGroups is Over", status: false })
             }
         }
     } catch (error) {
         res.status(400).json({ message: error.message, status: false });
     }
 }
-
-
 
 module.exports = {
     postMentorProfiles,
