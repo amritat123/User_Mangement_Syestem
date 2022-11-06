@@ -39,15 +39,16 @@ const MentorProfiles = require('../models/MentorProfile')
 
 //postMentorProfiles
 const postMentorProfiles = async (req, res) => {
-    // let photo = req.body
-    // photo['blog_Images'] = req.file.originalname
 
-    let { AboutYou, AgeGroups, Courses, Intro_Video } = req.body;
+    let { AboutYou, AgeGroups, Courses} = req.body;
     // console.log(req.user.user._id)
     let userId = req.user
+    let Intro_Video = "sss"
+    console.log(req.files.myField)
+    console.log(req.files.myField2)
 
-    console.log(req.file)
     const path = req.file.destination + "/" + req.file.originalname
+    
 
     if (!path) throw new Error('no  images file')
 
@@ -68,6 +69,7 @@ const postMentorProfiles = async (req, res) => {
                         Courses,
                         Intro_Video,
                         Mentor_Profiles: path,
+                    
                         userId
 
                     });
@@ -107,8 +109,6 @@ const postMentorProfiles = async (req, res) => {
                     }
 
                 }
-
-
             }
             else {
                 res.status(400).json({ message: "AgeGroups is Over", status: false })
@@ -119,7 +119,92 @@ const postMentorProfiles = async (req, res) => {
     }
 }
 
+
+const postMentorOnboard = async (req, res) => {
+    let { Feld, Verification, DOB, CV, ID } = req.body;
+    let userId = req.user
+
+    try {
+        if (!(Feld && Verification && DOB && CV && ID)) {
+            res
+                .status(400)
+                .json({ message: "All fields are required", status: false });
+        } else {
+            let Existing = await MentorProfiles.findOne({ userId })
+
+            if (Existing) {
+
+                let getResponce = await MentorProfiles.findOneAndUpdate({ userId }, {
+                    Feld,
+                    Verification,
+                    DOB,
+                    CV,
+                    ID,
+                    userId
+
+                });
+                if (!getResponce) {
+                    res
+                        .status(400)
+                        .json({ message: "Mentor Onboard not updated ", status: false });
+                } else {
+                    res.status(200).json({
+                        message: "Mentor Onboared is Updated successfully",
+                        data: getResponce,
+                        status: true,
+                    });
+                }
+
+            }
+        }
+    } catch (error) {
+        res.status(400).json({ message: error.message, status: false });
+    }
+}
+
+
+//GetAPI
+const GetMentorOnboard = async (req, res) => {
+    try {
+        const getMentorOnboard = await MentorProfiles.find();
+        if (!getMentorOnboard) {
+            res.json({ message: "there is no Mentor Onboard", status: false });
+        }
+        res.json({
+            message: "Found  Mnetor Onboard",
+            data: getMentorOnboard,
+            status: true,
+        });
+    } catch (error) {
+        res.json({ message: error.message, status: false });
+    }
+};
+
+
+//GetByUserId
+const GetMentorOnboardByUserId = async (req, res) => {
+
+    try {
+        let userId = req.user
+        const getMentorOnboard = await MentorProfiles.findOne({ userId: userId });
+        if (!getMentorOnboard) {
+            res.json({ message: "there is no Mentor Onboard", status: false });
+        }
+        res.json({
+            message: "Found  Mentor Onboard",
+            data: getMentorOnboard,
+            status: true,
+        });
+    } catch (error) {
+        res.json({ message: error.message, status: false });
+    }
+};
+
+
 module.exports = {
     postMentorProfiles,
+    postMentorOnboard,
+    GetMentorOnboard,
+    GetMentorOnboardByUserId
     // appSetting
 }

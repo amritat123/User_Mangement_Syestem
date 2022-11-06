@@ -23,7 +23,7 @@ module.exports.isAuthenticated = (req, res, next) => {
     const user = jwt.verify(token, process.env.TOKEN_KEY);
     if (!user) res.status(401).json({ message: "Authorization required" });
     req.user = user.user._id;
-    console.log(user, "effe");
+    // console.log(user, "effe");
     return next();
 
   } else {

@@ -12,8 +12,18 @@ const MentorProfilesdSchema = new mongoose.Schema({
 
     Intro_Video: { type: String, required: true },
 
-    userId:{type:String}
-    
+    userId:{type:String},
+
+    CV: { type: String, default: null },
+
+    Feld: { type: String, default: null },
+
+    Verification: { type: String, default: null },
+
+    DOB: { type: String, default: null },
+
+    ID: { type: String, default: null },
+
 
 },
     { timestamps: true });

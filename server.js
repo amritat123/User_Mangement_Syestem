@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 const mongoose = require('mongoose');
 const course = require('./routes/CourseType')
-const mentorOnboard = require('./routes/MentorOnboard')
+// const mentorOnboard = require('./routes/MentorOnboard')
 const MentorProfiles = require('./routes/MentorProfile')
 const AnySubject = require('./routes/subject');
 const ListStudent = require('./routes/student')
@@ -27,7 +27,7 @@ const DB_URI = process.env.DB_URI
 
 app.use('/', require('./routes/Mentor'));
 app.use('/Course', course)
-app.use('/Onboard', mentorOnboard)
+// app.use('/Onboard', mentorOnboard)
 app.use('/profiles', MentorProfiles)
 app.use('/Subject', AnySubject)
 app.use('/student', ListStudent)

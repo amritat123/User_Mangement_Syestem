@@ -1,4 +1,4 @@
-const { postMentorProfiles } = require("../controllers/MentorProfiles");
+const { postMentorProfiles, postMentorOnboard, GetMentorOnboard, GetMentorOnboardByUserId } = require("../controllers/MentorProfiles");
 
 const router = require("express").Router();
 
@@ -17,8 +17,12 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-router.post('/mentorprofiles', upload.single("myField"), isAuthenticated, postMentorProfiles)
+router.post('/mentorprofiles', isAuthenticated, upload.fields([{ name: "myField", maxCount: 1}, {name: "myField2", maxCount: 1 }]), postMentorProfiles)
+router.post('/mentoronboard', isAuthenticated, postMentorOnboard)
 
+router.get('/getMnetorOnboard', isAuthenticated,GetMentorOnboard)
+
+router.get('/mentorprofilebyuserid', isAuthenticated,GetMentorOnboardByUserId)
 
 
 
