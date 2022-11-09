@@ -1,4 +1,4 @@
-const { postMentorProfiles, postMentorOnboard, GetMentorOnboard, GetMentorOnboardByUserId } = require("../controllers/MentorProfiles");
+const { postMentorProfiles, postMentorOnboard, GetMentorOnboard, GetMentorOnboardByUserId, SearchMentorName, FeatureMentor } = require("../controllers/MentorProfiles");
 
 const router = require("express").Router();
 
@@ -17,33 +17,20 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-router.post('/mentorprofiles', isAuthenticated, upload.fields([{ name: "myField", maxCount: 1}, {name: "myField2", maxCount: 1 }]), postMentorProfiles)
+// router.post('/mentorprofiles', isAuthenticated, upload.fields([{ name: "myField", maxCount: 1}, {name: "myField2", maxCount: 1 }]), postMentorProfiles)
+router.post('/mentorprofiles', isAuthenticated, upload.single("MentorImages"), postMentorProfiles)
+
 router.post('/mentoronboard', isAuthenticated, postMentorOnboard)
 
 router.get('/getMnetorOnboard', isAuthenticated,GetMentorOnboard)
 
 router.get('/mentorprofilebyuserid', isAuthenticated,GetMentorOnboardByUserId)
 
+router.get('/Searchbymentornamesubjectage',SearchMentorName)
+
+router.post('/featurementor',isAuthenticated,upload.single("Mentor_Profiles"),FeatureMentor)
 
 
-// const auth = require("..middleware/authentication");
-// const MentorProfiles = require("../controllers/MentorProfiles");
-// const path = require("path");
-// const mentorID=require('')
-
-// router.post("/mentorprofiles", (req, res) => {
-//     const filePath = path.join(
-//         "C:/home/rubi / Downloads / DUGO - PROJECT / userUpload",
-//         `${mentorID}.MP4`
-//     );
-//     MentorProfiles(req, filePath)
-//         .then((path) =>
-//             res.status(200).send({ status: "file uploaded successfully", path })
-//         )
-//         .catch((err) =>
-//             res.status(500).send({ status: "Internal server error", err })
-//         );
-// });
 
 
 module.exports = router;

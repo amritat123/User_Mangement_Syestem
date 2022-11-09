@@ -10,19 +10,28 @@ const MentorProfilesdSchema = new mongoose.Schema({
 
     Mentor_Profiles: { type: String, required: true },
 
-    Intro_Video: { type: String, required: true },
+    Intro_Video: { type: String },
 
     userId:{type:String},
 
-    CV: { type: String, default: null },
+    CV: { type: String },
 
-    Feld: { type: String, default: null },
+    Feld: { type: String},
 
-    Verification: { type: String, default: null },
+    Verification: { type: String },
 
-    DOB: { type: String, default: null },
+    DOB: { type: String },
 
-    ID: { type: String, default: null },
+    ID: { type: String},
+
+    MentorName :{type:String},
+
+    Subject :{type:String},
+
+    Name:{
+        type:String
+    }
+
 
 
 },
