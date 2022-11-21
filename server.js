@@ -8,10 +8,14 @@ const MentorProfiles = require('./routes/MentorProfile')
 const AnySubject = require('./routes/subject');
 const ListStudent = require('./routes/student')
 const Mentor = require('./models/mentor')
+const connection = require('./routes/connection')
+const mentornews = require('./routes/mentornews')
+const Student_Connection = require('./routes/studentConnnection')
 
 // const User = require("./models/User");
 const Message = require("./models/message");
 const { request } = require('http');
+
 
 const rooms = ["general", "Our-team", "College-Fridens", "News"];
 require('dotenv').config();
@@ -31,6 +35,9 @@ app.use('/Course', course)
 app.use('/profiles', MentorProfiles)
 app.use('/Subject', AnySubject)
 app.use('/student', ListStudent)
+app.use('/Request',connection)
+app.use('/news',mentornews)
+app.use('/connections',Student_Connection)
 
 
 const server = require('http').createServer(app);
@@ -53,8 +60,8 @@ async function getLastMessagesFromRoom(room) {
 }
 
 
-//Room,, as a chat..
 
+//Room,, as a chat..
 function sortRoomMessagesByDate(messages) {
   return messages.sort(function (a, b) {
     let date1 = a._id.split("/");
@@ -85,8 +92,14 @@ io.on("connection", (socket) => {
   });
 
 
+  socket.on("add-room", async () => {
+    const newMessage = await Message.find({}, { to: 2, _id: 2 });
+    io.emit("message-room", newMessage);
+  });
 
-  //
+
+
+  //message-room
   socket.on("message-room", async (room, content, sender, time, date) => {
     const newMessage = await Message.create({
       content,
@@ -101,15 +114,17 @@ io.on("connection", (socket) => {
     socket.emit("room-messages", roomMessages);
     socket.broadcast.emit("notifications", room);
   });
-
-
 });
 
 
+
+//rooms
 app.get("/rooms", (req, res) => {
   res.json(rooms);
 });
 
+
+//members
 app.get("/members", async (req, res) => {
   try {
     const members = await User.find();
@@ -136,4 +151,3 @@ const Main = async () => {
 };
 
 Main();
-

@@ -1,21 +1,18 @@
 const  CourseType = require('../models/Cousetype')
 const moment = require("moment");
 
-
 const postCourseType = async (req, res) => {
-    let { long_Term_Course, Short_Term_Course, Webinar, Library_Coming_Soon } = req.body;
+    let { Course_ID,Course_name } = req.body;
 
     try {
-        if (!(long_Term_Course && Short_Term_Course && Webinar && long_Term_Course && Library_Coming_Soon)) {
+        if (!(Course_name && Course_ID)) {
             res
                 .status(400)
                 .json({ message: "All fields are required", status: false });
         } else {
             const getResponce = await CourseType.create({
-                long_Term_Course,
-                Short_Term_Course,
-                Webinar,
-                Library_Coming_Soon,
+                Course_ID,
+                Course_name,
                 time: moment().format("llll"),
             });
 
@@ -36,7 +33,6 @@ const postCourseType = async (req, res) => {
     }
 }
 
-
 //getAll Coures
 const GetAllCouresType = async (req, res) => {
     try {
@@ -53,7 +49,6 @@ const GetAllCouresType = async (req, res) => {
         res.json({ message: error.message, status: false });
     }
 };
-
 
 
 module.exports = {

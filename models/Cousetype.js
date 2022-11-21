@@ -2,16 +2,11 @@ const mongoose = require('mongoose');
 
 const CourseTypeSchema = new mongoose.Schema({
 
-    long_Term_Course: { type: String },
+    Course_ID: { type: String },
 
-    Short_Term_Course: { type: String },
-
-    Webinar: { type: String },
+    Course_name: { type: String },
 
     created: { type: String, default: new Date().toISOString() },
-
-    Library_Coming_Soon: { type: String, required: true },
-
 } , 
 
 { timestamps: true });
