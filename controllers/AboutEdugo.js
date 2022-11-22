@@ -1,9 +1,8 @@
-const Student = require('../models/student')
+const AboutEDUGO = require('../models/aboutedugo')
 
 
-const AddStudent = async (req, res) => {
-    let { Student_Name, Class } = req.body;
-
+const MentorAboutEdugoPost = async (req, res) => {
+    let {Title ,Description,About} = req.body;
 
     console.log(req.file)
     const path = req.file.destination + "/" + req.file.originalname
@@ -11,26 +10,28 @@ const AddStudent = async (req, res) => {
     if (!path) throw new Error('no  images file')
 
     console.log(path)
-  
+
+    
+
     try {
-        if (!(Student_Name && Class)) {
+        if (!(Title && Description && About )) {
             res
                 .status(400)
                 .json({ message: "All fields are required", status: false });
         } else {
-            const getResponce = await Student.create({
-                Student_Name,
-                Class,
-                Student_Images:path
+            const getResponce = await AboutEDUGO.create({
+                Title,
+                Description,
+                Images:path
             });
 
             if (!getResponce) {
                 res
                     .status(400)
-                    .json({ message: "Students not  Has Added", status: false });
+                    .json({ message: "About Edugo not  Has Added", status: false });
             } else {
                 res.status(200).json({
-                    message: "Student List   is  Added successfully",
+                    message: "About Edugo successfully",
                     data: getResponce,
                     status: true,
                 });
@@ -42,15 +43,14 @@ const AddStudent = async (req, res) => {
 }
 
 
-//Subject List
-const GetAllStudents = async (req, res) => {
+const GetAllAboutEdogu = async (req, res) => {
     try {
-        const getMentorOnboard = await Student.find();
+        const getMentorOnboard = await AboutEDUGO.find();
         if (!getMentorOnboard) {
             res.json({ message: "there is no Students List", status: false });
         }
         res.json({
-            message: "Found  All Students List",
+            message: "Found  All News",
             data: getMentorOnboard,
             status: true,
         });
@@ -59,11 +59,8 @@ const GetAllStudents = async (req, res) => {
     }
 };
 
-
-//update students List
-const UpdateStudentLists = async (req, res) => {
-    // let { Student_Name, Class } = req.body;
-    let { Student_Name, Class } = req.body;
+const UpdateMentorAboutEdugo = async (req, res) => {
+    let { Title ,Description ,About} = req.body;
 
     console.log(req.file)
     const path = req.file.destination + "/" + req.file.originalname
@@ -72,14 +69,14 @@ const UpdateStudentLists = async (req, res) => {
 
     console.log(path)
     try {
-        const UpdateStudentsList = await Student.findOneAndUpdate(
-            { id: req.params._id }, { Student_Name, Class, Student_Images: path }
+        const UpdateStudentsList = await AboutEDUGO.findOneAndUpdate(
+            { id: req.params._id }, {Title,Description,Images:path }
         );
         if (!UpdateStudentsList) {
             res.json({ message: "Enter the correct id", status: false });
         } else {
             res.json({
-                message: "Students List   has updated successsfully",
+                message: "About Edugo Posted successsfully",
                 data: UpdateStudentsList,
                 status: true,
             });
@@ -90,22 +87,10 @@ const UpdateStudentLists = async (req, res) => {
 };
 
 
-//count of students
-const TotalCountOfStudents = async(req,res) =>{
-    try {
-        const Total_Students = await Student.find();
-        res.status(200).json({message:"Total Students Of list",Total_Number_Of_Students:Total_Students.length})
-    } catch (error) {
-        res.json({ message: error.message, status: false });
-        
-    }
-}
 
-
-
-module.exports ={
-    AddStudent,
-    GetAllStudents,
-    UpdateStudentLists,
-    TotalCountOfStudents
+module.exports = {
+    MentorAboutEdugoPost,
+    GetAllAboutEdogu,
+    UpdateMentorAboutEdugo
+    
 }

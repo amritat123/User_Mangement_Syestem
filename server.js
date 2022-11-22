@@ -1,53 +1,54 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 const app = express();
-const mongoose = require('mongoose');
-const course = require('./routes/CourseType')
+const mongoose = require("mongoose");
+const course = require("./routes/CourseType");
 // const mentorOnboard = require('./routes/MentorOnboard')
-const MentorProfiles = require('./routes/MentorProfile')
-const AnySubject = require('./routes/subject');
-const ListStudent = require('./routes/student')
-const Mentor = require('./models/mentor')
-const connection = require('./routes/connection')
-const mentornews = require('./routes/mentornews')
-const Student_Connection = require('./routes/studentConnnection')
+const MentorProfiles = require("./routes/MentorProfile");
+const AnySubject = require("./routes/subject");
+const ListStudent = require("./routes/student");
+const Mentor = require("./models/mentor");
+const connection = require("./routes/connection");
+const mentornews = require("./routes/mentornews");
+const Student_Connection = require("./routes/studentConnnection");
+const anyabout = require("./routes/AboutEdugo");
+const ViewAttendance = require("./routes/Attendence");
 
 // const User = require("./models/User");
 const Message = require("./models/message");
-const { request } = require('http');
-
+const { request } = require("http");
 
 const rooms = ["general", "Our-team", "College-Fridens", "News"];
-require('dotenv').config();
-
+require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
 
-// 
-const PORT = process.env.PORT || 5000
-const DB_URI = process.env.DB_URI
+//
+const PORT = process.env.PORT || 5000;
+const DB_URI = process.env.DB_URI;
 
-
-app.use('/', require('./routes/Mentor'));
-app.use('/Course', course)
+app.use("/", require("./routes/Mentor"));
+app.use("/Course", course);
 // app.use('/Onboard', mentorOnboard)
-app.use('/profiles', MentorProfiles)
-app.use('/Subject', AnySubject)
-app.use('/student', ListStudent)
-app.use('/Request',connection)
-app.use('/news',mentornews)
-app.use('/connections',Student_Connection)
+app.use("/profiles", MentorProfiles);
+app.use("/Subject", AnySubject);
+app.use("/student", ListStudent);
+app.use("/Request", connection);
+app.use("/news", mentornews);
+app.use("/connections", Student_Connection);
+app.use("/About", anyabout);
+app.use('/Attendance',ViewAttendance)
 
 
-const server = require('http').createServer(app);
-const io = require('socket.io')(server, {
+
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
-  }
-})
-
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 
 //get the all messgae
 async function getLastMessagesFromRoom(room) {
@@ -58,8 +59,6 @@ async function getLastMessagesFromRoom(room) {
 
   return roomMessages;
 }
-
-
 
 //Room,, as a chat..
 function sortRoomMessagesByDate(messages) {
@@ -74,13 +73,11 @@ function sortRoomMessagesByDate(messages) {
   });
 }
 
-
 io.on("connection", (socket) => {
   socket.on("new-user", async () => {
     const members = await Mentor.find();
     io.emit("new-user", members);
   });
-
 
   //
   socket.on("join-room", async (newRoom, previousRoom) => {
@@ -91,13 +88,10 @@ io.on("connection", (socket) => {
     socket.emit("room-messages", roomMessages);
   });
 
-
   socket.on("add-room", async () => {
     const newMessage = await Message.find({}, { to: 2, _id: 2 });
     io.emit("message-room", newMessage);
   });
-
-
 
   //message-room
   socket.on("message-room", async (room, content, sender, time, date) => {
@@ -116,13 +110,10 @@ io.on("connection", (socket) => {
   });
 });
 
-
-
 //rooms
 app.get("/rooms", (req, res) => {
   res.json(rooms);
 });
-
 
 //members
 app.get("/members", async (req, res) => {
@@ -135,12 +126,9 @@ app.get("/members", async (req, res) => {
   }
 });
 
-
-
 const Main = async () => {
   try {
     await mongoose.connect(DB_URI);
-
 
     server.listen(PORT, () => {
       console.log("listening to port", PORT);
@@ -149,5 +137,6 @@ const Main = async () => {
     console.log(error);
   }
 };
+
 
 Main();

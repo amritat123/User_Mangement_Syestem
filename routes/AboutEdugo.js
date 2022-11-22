@@ -6,7 +6,7 @@ const { isAuthenticated } = require("../controllers/middlewares/auth");
 const path = require("path");
 var multer = require("multer");
 
-const { MentorNewsPost, GetAllNews, UpdateMentorNews } = require("../controllers/mentorNews");
+const {MentorAboutEdugoPost, GetAllAboutEdogu, UpdateMentorAboutEdugo } = require("../controllers/aboutedugo");
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "public/images");
@@ -16,14 +16,13 @@ var storage = multer.diskStorage({
     },
 });
 
+
 var upload = multer({ storage: storage });
 
-
 // router.post('/mentorprofiles', isAuthenticated, upload.fields([{ name: "myField", maxCount: 1}, {name: "myField2", maxCount: 1 }]), postMentorProfiles)
-router.post('/mentor-news-add', upload.single("News_Images"),MentorNewsPost)
-router.get('/get-all-mentor-news',GetAllNews)
-router.patch('/udate-any-new/:id',upload.single("News_Images"),UpdateMentorNews)
-
-
+router.post('/mentor-about-edugo', upload.single("Images"),MentorAboutEdugoPost)
+router.get('/get-all-mentor-about-edugo',GetAllAboutEdogu)
+router.patch('/udate-any-about-edugo/:id',upload.single("Images"),UpdateMentorAboutEdugo)
 
 module.exports = router;
+
