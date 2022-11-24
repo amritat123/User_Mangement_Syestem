@@ -5,7 +5,7 @@ const MentorNewsPost = async (req, res) => {
     let {Title ,News_Description } = req.body;
 
     console.log(req.file)
-    const path = req.file.destination + "/" + req.file.originalname
+    const path = req.file.originalname;
 
     if (!path) throw new Error('no  images file')
 
@@ -62,7 +62,7 @@ const UpdateMentorNews = async (req, res) => {
     let { Title ,News_Description} = req.body;
 
     console.log(req.file)
-    const path = req.file.destination + "/" + req.file.originalname
+    const path = req.file.originalname;
 
     if (!path) throw new Error('no  images file')
 

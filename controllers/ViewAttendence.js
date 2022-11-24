@@ -13,6 +13,8 @@ const { getByOne, Patchdata, getBy, postdata,  Deletedata } = require('../servic
 //     data: data
 //   })
 // }
+
+
 const AttendenceStudentpost = async (req, res) => {
   let { Student_List, Student_Present,Student_Absent,UserId } = req.body;
   try {
@@ -133,6 +135,31 @@ const DeleteStudentAttendence = async (req, res) => {
 
 
 
+const addCategory = async (req, res) => {
+  const categoryImage = req.file ? req.file.filename : null;
+  const { name, top_categories } = req.body;
+  try {
+    const data = await Category.create({
+      name,
+      top_categories,
+      image: categoryImage,
+    });
+    res.status(200).json({ msg: "Category successfully added", data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// module.exports.viewCategory = async (req, res) => {
+//   try {
+//     const data = await Category.find({});
+//     res.status(200).json(data);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+
 
 module.exports ={
   AttendenceStudentpost,
@@ -140,7 +167,8 @@ module.exports ={
   StudentAttendenceEdit,
   DeleteStudentAttendence,
   CountOfStudentsAttendance,
-  CountOfStudentsAttendancePresent
+  CountOfStudentsAttendancePresent,
+  addCategory
 
 
 }

@@ -13,6 +13,7 @@ const mentornews = require("./routes/mentornews");
 const Student_Connection = require("./routes/studentConnnection");
 const anyabout = require("./routes/AboutEdugo");
 const ViewAttendance = require("./routes/Attendence");
+const setting = require('./routes/notification')
 
 // const User = require("./models/User");
 const Message = require("./models/message");
@@ -39,6 +40,7 @@ app.use("/news", mentornews);
 app.use("/connections", Student_Connection);
 app.use("/About", anyabout);
 app.use('/Attendance',ViewAttendance)
+app.use('/Notification',setting)
 
 
 
@@ -60,6 +62,7 @@ async function getLastMessagesFromRoom(room) {
   return roomMessages;
 }
 
+
 //Room,, as a chat..
 function sortRoomMessagesByDate(messages) {
   return messages.sort(function (a, b) {
@@ -73,11 +76,14 @@ function sortRoomMessagesByDate(messages) {
   });
 }
 
+
 io.on("connection", (socket) => {
   socket.on("new-user", async () => {
     const members = await Mentor.find();
     io.emit("new-user", members);
   });
+
+
 
   //
   socket.on("join-room", async (newRoom, previousRoom) => {
@@ -88,10 +94,14 @@ io.on("connection", (socket) => {
     socket.emit("room-messages", roomMessages);
   });
 
+
+
   socket.on("add-room", async () => {
-    const newMessage = await Message.find({}, { to: 2, _id: 2 });
+    const newMessage = await Message.find({}, { to: 1, _id: 1 });
     io.emit("message-room", newMessage);
   });
+
+
 
   //message-room
   socket.on("message-room", async (room, content, sender, time, date) => {

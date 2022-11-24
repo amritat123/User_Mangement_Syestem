@@ -33,7 +33,6 @@ const MentorProfilesdSchema = new mongoose.Schema({
     }
 
 
-
 },
     { timestamps: true });
 

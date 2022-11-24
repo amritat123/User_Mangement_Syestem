@@ -31,16 +31,19 @@ const MentorProfiles = require("../models/MentorProfile");
 
 // };
 
-//postMentorProfiles
 
+
+//postMentorProfiles
 const postMentorProfiles = async (req, res) => {
+
   let { AboutYou, AgeGroups, Courses, Intro_Video} =
     req.body;
   // console.log(req.user.user._id)
   let userId = req.user;
 
   console.log(req.file);
-  const path = req.file.destination + "/" + req.file.originalname;
+  const path = req.file.originalname;
+  // const path = req.file.destination + "/" + req.file.originalname;
 
   if (!path) throw new Error("no  images file");
 
@@ -252,10 +255,10 @@ const SearchMentorName = async (req, res) => {
 //FeatureMentor
 const FeatureMentor = async (req, res) => {
   let { Name, AgeGroups, Subject } = req.body;
-  console.log("sss")
+  // console.log("sss")
 
   console.log(req.file);
-  const path = req.file.destination + "/" + req.file.originalname;
+  const path = req.file.originalname;
 
   if (!path) throw new Error("no  images file");
 
@@ -292,6 +295,64 @@ const FeatureMentor = async (req, res) => {
 };
 
 
+//mentor Certificate 
+// const GetByMentoriDCertificate = async (req, res) => {
+//   try {
+//     // const followersID = req.params.id;
+//     const newMessage = await MentorProfiles.find({}, { to: 1, _id: 1 });
+//     res
+//       .status(200)
+//       .json({
+//         message: "All Pending Fellow",
+//         conection: conection,
+//         status: true,
+//       });
+//   } catch (e) {
+//     res.status(400).json(e.message);
+//   }
+// };
+
+const GetByMentoriDCertificate = async (req, res) => {
+  try {
+
+    // let userId = req.user;
+    const getMentorOnboard = await MentorProfiles.find({}, {userId:1, Name: 1, AgeGroups: 1,Subject:1 ,Mentor_Profiles:1});
+    if (!getMentorOnboard) {
+      res.json({ message: "there is no Mentor Onboard", status: false });
+    }
+
+    res.json({
+      message: "Found  Mentor Ceritificate",
+      data: getMentorOnboard,
+      status: true,
+
+    });
+
+  } catch (error) {
+    res.json({ message: error.message, status: false });
+  }
+};
+
+
+//getByMentorSubject
+const GetMentorSubject = async (req, res) => {
+  try {
+    const Subject = req.params.id;
+    const getMentorOnboard = await MentorProfiles.find({ Subject });
+    if (!getMentorOnboard) {
+      res.json({ message: "there is no Mentor Onboard", status: false });
+    }
+    res.json({
+      message: "Found  Mentor Subject",
+      data: getMentorOnboard,
+      status: true,
+    });
+  } catch (error) {
+    res.json({ message: error.message, status: false });
+  }
+};
+
+
 
 module.exports = {
   postMentorProfiles,
@@ -300,5 +361,8 @@ module.exports = {
   GetMentorOnboardByUserId,
   SearchMentorName,
   FeatureMentor,
+  GetByMentoriDCertificate,
+  GetMentorSubject
   // appSetting
 };
+
