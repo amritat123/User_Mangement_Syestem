@@ -6,7 +6,8 @@ const { postMentorProfiles,
     SearchMentorName, 
     FeatureMentor, 
     GetByMentoriDCertificate, 
-    GetMentorSubject } = require("../controllers/MentorProfiles");
+    GetMentorSubject, 
+    GetByMentorProfilesByuserId} = require("../controllers/MentorProfiles");
 
 const { isAuthenticated } = require("../controllers/middlewares/auth");
 
@@ -57,6 +58,8 @@ router.post('/featurementor',isAuthenticated,upload.single("Mentor_Profiles"),Fe
 router.get('/get-by-mentor-id',isAuthenticated,GetByMentoriDCertificate)
 
 router.get('/get-by-mentor-subject',isAuthenticated,GetMentorSubject)
+
+router.get('/get-by-user-id-mentor-rofiles',isAuthenticated,GetByMentorProfilesByuserId)
 
 
 

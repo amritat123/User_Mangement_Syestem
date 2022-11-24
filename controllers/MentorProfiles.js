@@ -307,7 +307,7 @@ const GetByMentoriDCertificate = async (req, res) => {
     }
 
     res.json({
-      message: "Found  Mentor Ceritificate",
+      message: "Found  Mentor Ceritificates",
       data: getMentorOnboard,
       status: true,
 
@@ -338,6 +338,24 @@ const GetMentorSubject = async (req, res) => {
   }
 };
 
+const GetByMentorProfilesByuserId = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const getMentorOnboard = await MentorProfiles.find({ userId:{$regex:userId.toString(),$options:"i"} });
+    if (!getMentorOnboard) {
+      res.json({ message: "there is no Mentor Onboard", status: false });
+    }
+    res.json({
+      message: "Found  mentor Profles",
+      data: getMentorOnboard,
+      status: true,
+    });
+  } catch (error) {
+    res.json({ message: error.message, status: false });
+  }
+};
+
+
 
 module.exports = {
   postMentorProfiles,
@@ -347,7 +365,9 @@ module.exports = {
   SearchMentorName,
   FeatureMentor,
   GetByMentoriDCertificate,
-  GetMentorSubject
+  GetMentorSubject,
+  GetByMentorProfilesByuserId
   // appSetting
 };
+
 
