@@ -295,23 +295,8 @@ const FeatureMentor = async (req, res) => {
 };
 
 
-//mentor Certificate 
-// const GetByMentoriDCertificate = async (req, res) => {
-//   try {
-//     // const followersID = req.params.id;
-//     const newMessage = await MentorProfiles.find({}, { to: 1, _id: 1 });
-//     res
-//       .status(200)
-//       .json({
-//         message: "All Pending Fellow",
-//         conection: conection,
-//         status: true,
-//       });
-//   } catch (e) {
-//     res.status(400).json(e.message);
-//   }
-// };
 
+//GetByMentoriDCertificate
 const GetByMentoriDCertificate = async (req, res) => {
   try {
 
@@ -331,14 +316,15 @@ const GetByMentoriDCertificate = async (req, res) => {
   } catch (error) {
     res.json({ message: error.message, status: false });
   }
-};
+}
+
 
 
 //getByMentorSubject
 const GetMentorSubject = async (req, res) => {
   try {
-    const Subject = req.params.id;
-    const getMentorOnboard = await MentorProfiles.find({ Subject });
+    const { Subject } = req.query;
+    const getMentorOnboard = await MentorProfiles.find({ Subject:{$regex:Subject.toString(),$options:"i"} });
     if (!getMentorOnboard) {
       res.json({ message: "there is no Mentor Onboard", status: false });
     }
@@ -351,7 +337,6 @@ const GetMentorSubject = async (req, res) => {
     res.json({ message: error.message, status: false });
   }
 };
-
 
 
 module.exports = {
