@@ -354,7 +354,7 @@ const GetMentorSubject = async (req, res) => {
     const { subject } = req.params;
     const getMentorOnboard = await MentorProfiles.find({ Subject: { $regex: subject.toString(), $options: "i" } });
     if (!getMentorOnboard) {
-      res.json({ message: "there is no Mentor Onboard", status: false });
+      res.json({ message: "there is no Subject", status: false });
     }
     res.json({
       message: "Found  Mentor Subject",
@@ -372,7 +372,7 @@ const GetByMentorProfilesByuserId = async (req, res) => {
     const { userId } = req.query;
     const getMentorOnboard = await MentorProfiles.find({ userId: { $regex: userId.toString(), $options: "i" } });
     if (!getMentorOnboard) {
-      res.json({ message: "there is no Mentor Onboard", status: false });
+      res.json({ message: "there is no data", status: false });
     }
     res.json({
       message: "Found  mentor Profles",
@@ -386,6 +386,34 @@ const GetByMentorProfilesByuserId = async (req, res) => {
 
 
 
+
+//Top mentor
+const FindTopMentor = async (req,res) =>{
+  try {
+
+    // let userId = req.user;
+    const getTopMentor = await MentorProfiles.find({}, { userId: 1, Name: 1, AgeGroups: 1, Subject: 1, Mentor_Profiles: 1 });
+    if (!getTopMentor) {
+      res.json({ message: "there is no any Tom mentor", status: false });
+    }
+
+    res.json({
+      message: "Found  Top Mentor",
+      data: getTopMentor,
+      status: true,
+
+    });
+
+  } catch (error) {
+    res.json({ message: error.message, status: false });
+  }
+}
+
+
+
+
+
+
 module.exports = {
   postMentorProfiles,
   postMentorOnboard,
@@ -395,7 +423,8 @@ module.exports = {
   FeatureMentor,
   GetByMentoriDCertificate,
   GetMentorSubject,
-  GetByMentorProfilesByuserId
+  GetByMentorProfilesByuserId,
+  FindTopMentor
   // appSetting
 };
 

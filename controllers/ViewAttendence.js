@@ -1,7 +1,7 @@
 
 
 const Attendence = require('../models/Attendence');
-const { getByOne, Patchdata, getBy, postdata,  Deletedata } = require('../services/routes');
+// const { getByOne, Patchdata, getBy, postdata,  Deletedata } = require('../services/routes');
 
 
 //postStudent
@@ -92,43 +92,41 @@ const getAttendenceOfStuydent = async (req, res) => {
 };
 
 
-const CountOfStudentsAttendance = async(req,res) =>{
-  try {
-      const absent = await Attendence.find();
-  
-        res.status(200).json({message:"Absent Students ",Student_Absent:absent})
-      
-  } catch (error) {
-      res.json({ message: error.message, status: false });
-      
-  }
-}
-
-
-
-const CountOfStudentsAttendancePresent = async(req,res) =>{
-  try {
-      const absent = await Attendence.find();
-  
-        res.status(200).json({message:"Present Students ",Student_Present:absent.length})
-      
-  } catch (error) {
-      res.json({ message: error.message, status: false });
-      
-  }
-}
-
-
-// const TotalCountOfStudentsList = async(req,res) =>{
+// const CountOfStudentsAttendance = async(req,res) =>{
 //   try {
-//       const Total_Students = await Student.find();
-//       res.status(200).json({message:"Total Students Of list",Total_Number_Of_Students:Total_Students.length})
+//       const absent = await Attendence.find();
+  
+//         res.status(200).json({message:"Absent Students ",Student_Absent:absent})
+      
 //   } catch (error) {
 //       res.json({ message: error.message, status: false });
       
 //   }
 // }
 
+const CountOfStudentsAttendance = async(req,res) =>{
+  try {
+    const absent = await Attendence.find();
+
+        res.status(200).json({message:"Absent Students ",Student_Absent:absent})
+  } catch (error) {
+      res.json({ message: error.message, status: false });
+      
+  }
+}
+
+
+const CountOfStudentsAttendancePresent = async(req,res) =>{
+  try {
+      const absent = await Attendence.find();
+  
+        res.status(200).json({message:"Present Students ",Student_Present:absent})
+      
+  } catch (error) {
+      res.json({ message: error.message, status: false });
+      
+  }
+}
 
 
 // const getAttendenceOfStuydent = async (req, res) => {
@@ -140,61 +138,34 @@ const CountOfStudentsAttendancePresent = async(req,res) =>{
 // };
 
 
-const StudentAttendenceEdit = async (req, res) => {
-  const data=await Patchdata(Attendence,{ _id: req.params.id },req.body)
-  res.status(200).json({
-    message: 'Student Attendence Edit Successfully',
-    data:data
-  })
-    
-  
-}
+// const StudentAttendenceEdit = async (req, res) => {
+//   const data=await Patchdata(Attendence,{ _id: req.params.id },req.body)
+//   res.status(200).json({
+//     message: 'Student Attendence Edit Successfully',
+//     data:data
+//   })
+// }
 
 
-const DeleteStudentAttendence = async (req, res) => {
-  const data=await Deletedata(Attendence,{ _id: req.params.id })
-  res.status(200).json({
-    message: 'Student Attendence Remove Successfully',
-    data:data
-  })    
-};
-
-
-
-const addCategory = async (req, res) => {
-  const categoryImage = req.file ? req.file.filename : null;
-  const { name, top_categories } = req.body;
-  try {
-    const data = await Category.create({
-      name,
-      top_categories,
-      image: categoryImage,
-    });
-    res.status(200).json({ msg: "Category successfully added", data });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// module.exports.viewCategory = async (req, res) => {
-//   try {
-//     const data = await Category.find({});
-//     res.status(200).json(data);
-//   } catch (error) {
-//     console.log(error);
-//   }
+// const DeleteStudentAttendence = async (req, res) => {
+//   const data=await Deletedata(Attendence,{ _id: req.params.id })
+//   res.status(200).json({
+//     message: 'Student Attendence Remove Successfully',
+//     data:data
+//   })    
 // };
+
 
 
 
 module.exports ={
   AttendenceStudentpost,
   getAttendenceOfStuydent,
-  StudentAttendenceEdit,
-  DeleteStudentAttendence,
+  // StudentAttendenceEdit,
+  // DeleteStudentAttendence,
   CountOfStudentsAttendance,
   CountOfStudentsAttendancePresent,
-  addCategory
+  // addCategory
 
 
 }

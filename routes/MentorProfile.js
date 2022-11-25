@@ -7,7 +7,8 @@ const { postMentorProfiles,
     FeatureMentor, 
     GetByMentoriDCertificate, 
     GetMentorSubject, 
-    GetByMentorProfilesByuserId} = require("../controllers/MentorProfiles");
+    GetByMentorProfilesByuserId,
+    FindTopMentor} = require("../controllers/MentorProfiles");
 
 const { isAuthenticated } = require("../controllers/middlewares/auth");
 
@@ -44,22 +45,15 @@ var upload = multer({ storage: storage });
 
 // router.post('/mentorprofiles', isAuthenticated, upload.fields([{ name: "myField", maxCount: 1}, {name: "myField2", maxCount: 1 }]), postMentorProfiles)
 router.post('/mentorprofiles', isAuthenticated, upload.single("MentorImages"), postMentorProfiles)
-
 router.post('/mentoronboard', isAuthenticated, postMentorOnboard)
-
 router.get('/getMnetorOnboard', isAuthenticated,GetMentorOnboard)
-
 router.get('/mentorprofilebyuserid', isAuthenticated,GetMentorOnboardByUserId)
-
 router.get('/Searchbymentornamesubjectage',SearchMentorName)
-
 router.post('/featurementor',isAuthenticated,upload.single("Mentor_Profiles"),FeatureMentor)
-
 router.get('/get-by-mentor-id',isAuthenticated,GetByMentoriDCertificate)
-
 router.get('/get-by-mentor-subject/:subject',isAuthenticated,GetMentorSubject)
-
 router.get('/get-by-user-id-mentor-rofiles',isAuthenticated,GetByMentorProfilesByuserId)
+router.get('/find-top-mentor',FindTopMentor)
 
 
 
