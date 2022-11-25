@@ -6,7 +6,7 @@ const { isAuthenticated } = require("../controllers/middlewares/auth");
 const path = require("path");
 var multer = require("multer");
 
-const {MentorAboutEdugoPost, GetAllAboutEdogu, UpdateMentorAboutEdugo } = require("../controllers/aboutedugo");
+const {MentorAboutEdugoPost, GetAllAboutEdogu, UpdateMentorAboutEdugo } = require("../controllers/AboutEdugo");
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "public/images");

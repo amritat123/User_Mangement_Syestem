@@ -36,7 +36,7 @@ const MentorProfiles = require("../models/MentorProfile");
 //postMentorProfiles
 const postMentorProfiles = async (req, res) => {
 
-  let { AboutYou, AgeGroups, Courses, Intro_Video} =
+  let { AboutYou, AgeGroups, Courses, Intro_Video } =
     req.body;
   // console.log(req.user.user._id)
   let userId = req.user;
@@ -55,7 +55,7 @@ const postMentorProfiles = async (req, res) => {
         AboutYou &&
         AgeGroups &&
         Courses &&
-        Intro_Video 
+        Intro_Video
 
       )
     ) {
@@ -120,6 +120,7 @@ const postMentorProfiles = async (req, res) => {
 };
 
 
+
 //PostMentorOnbord
 const postMentorOnboard = async (req, res) => {
   let { Feld, Verification, DOB, CV, ID } = req.body;
@@ -150,10 +151,32 @@ const postMentorOnboard = async (req, res) => {
           res
             .status(400)
             .json({ message: "Mentor Onboard not updated ", status: false });
+
         } else {
           res.status(200).json({
             message: "Mentor Onboared is Updated successfully",
             data: getResponce,
+            status: true,
+          });
+        }
+      }
+      else {
+        let getResponce = await MentorProfiles.create(
+          {
+            Feld,
+            Verification,
+            DOB,
+            CV,
+            ID,
+            userId,
+          }
+        );
+        if (!getResponce) {
+          res
+            .status(400)
+            .json({ message: "Mentor Onboard not Created ", status: false });
+
+        } else {res.status(200).json({message: "Mentor Onboared is Created successfully",data: getResponce,
             status: true,
           });
         }
@@ -163,7 +186,6 @@ const postMentorOnboard = async (req, res) => {
     res.status(400).json({ message: error.message, status: false });
   }
 };
-
 
 
 //GetAPI
@@ -252,10 +274,12 @@ const SearchMentorName = async (req, res) => {
   }
 };
 
+
 //FeatureMentor
 const FeatureMentor = async (req, res) => {
-  let { Name, AgeGroups, Subject } = req.body;
-  // console.log("sss")
+  let { Name, AgeGroups, Subject} = req.body;
+
+  let userId = req.user;
 
   console.log(req.file);
   const path = req.file.originalname;
@@ -269,12 +293,14 @@ const FeatureMentor = async (req, res) => {
       res
         .status(400)
         .json({ message: "All fields are required", status: false });
+
     } else {
-      const getResponce = await MentorProfiles.create({
+      const getResponce = await MentorProfiles.findOneAndUpdate({userId},{
         Name,
         AgeGroups,
         Subject,
         Mentor_Profiles: path,
+
       });
 
       if (!getResponce) {
@@ -296,12 +322,13 @@ const FeatureMentor = async (req, res) => {
 
 
 
+
 //GetByMentoriDCertificate
 const GetByMentoriDCertificate = async (req, res) => {
   try {
 
     // let userId = req.user;
-    const getMentorOnboard = await MentorProfiles.find({}, {userId:1, Name: 1, AgeGroups: 1,Subject:1 ,Mentor_Profiles:1});
+    const getMentorOnboard = await MentorProfiles.find({}, { userId: 1, Name: 1, AgeGroups: 1, Subject: 1, Mentor_Profiles: 1 });
     if (!getMentorOnboard) {
       res.json({ message: "there is no Mentor Onboard", status: false });
     }
@@ -320,11 +347,12 @@ const GetByMentoriDCertificate = async (req, res) => {
 
 
 
+
 //getByMentorSubject
 const GetMentorSubject = async (req, res) => {
   try {
-    const { Subject } = req.query;
-    const getMentorOnboard = await MentorProfiles.find({ Subject:{$regex:Subject.toString(),$options:"i"} });
+    const { subject } = req.params;
+    const getMentorOnboard = await MentorProfiles.find({ Subject: { $regex: subject.toString(), $options: "i" } });
     if (!getMentorOnboard) {
       res.json({ message: "there is no Mentor Onboard", status: false });
     }
@@ -338,10 +366,11 @@ const GetMentorSubject = async (req, res) => {
   }
 };
 
+
 const GetByMentorProfilesByuserId = async (req, res) => {
   try {
     const { userId } = req.query;
-    const getMentorOnboard = await MentorProfiles.find({ userId:{$regex:userId.toString(),$options:"i"} });
+    const getMentorOnboard = await MentorProfiles.find({ userId: { $regex: userId.toString(), $options: "i" } });
     if (!getMentorOnboard) {
       res.json({ message: "there is no Mentor Onboard", status: false });
     }

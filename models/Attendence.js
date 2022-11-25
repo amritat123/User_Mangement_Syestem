@@ -29,6 +29,8 @@ Student_Present: {
     type: [String],
     default: null,
   },
+  CourseId:{type:String},
+  Date: { type: String },
 
 }, 
  { timestamps: true});

@@ -35,9 +35,9 @@ cb(null, "public") },
 
 
 filename: function (req, file, cb) {
-let newname= Math.floor(10000000000 + Math.random() * 90000000000) +"."+file.originalname.split(".")[1]
-file.originalname=newname
-cb(null, file.originalname);},});
+    let newname = Math.floor(10000000000 + Math.random() * 90000000000) + "." + file.originalname.split(".")[1]
+    file.originalname=newname
+    cb(null, file.originalname);},});
 
 var upload = multer({ storage: storage });
 
@@ -57,7 +57,7 @@ router.post('/featurementor',isAuthenticated,upload.single("Mentor_Profiles"),Fe
 
 router.get('/get-by-mentor-id',isAuthenticated,GetByMentoriDCertificate)
 
-router.get('/get-by-mentor-subject',isAuthenticated,GetMentorSubject)
+router.get('/get-by-mentor-subject/:subject',isAuthenticated,GetMentorSubject)
 
 router.get('/get-by-user-id-mentor-rofiles',isAuthenticated,GetByMentorProfilesByuserId)
 

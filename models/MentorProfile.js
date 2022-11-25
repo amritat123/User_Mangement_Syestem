@@ -24,9 +24,11 @@ const MentorProfilesdSchema = new mongoose.Schema({
 
     ID: { type: String},
 
-    MentorName :{type:String},
+    // MentorName :{type:String},
 
     Subject :{type:String},
+
+    
 
     Name:{
         type:String

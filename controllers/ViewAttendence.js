@@ -16,14 +16,17 @@ const { getByOne, Patchdata, getBy, postdata,  Deletedata } = require('../servic
 
 
 const AttendenceStudentpost = async (req, res) => {
-  let { Student_List, Student_Present,Student_Absent,UserId } = req.body;
+  let { Student_List, Student_Present, Student_Absent, UserId, CourseId,Date } = req.body;
   try {
-      if (!(Student_List && Student_Present && Student_Absent && UserId )) {
+    if (!(Student_List && Student_Present && Student_Absent && UserId && CourseId && Date )) {
           res
               .status(400)
               .json({ message: "All fields are required", status: false });
       } else {
-          const getResponce = await Attendence.create({
+        const  Existing= await Attendence.findOne({ CourseId,Date });
+
+        if (Existing){
+          const getResponce = await Attendence.findOneAndUpdate({ CourseId, Date }, {
             Student_List,
             Student_Present,
             Student_Absent,
@@ -32,17 +35,40 @@ const AttendenceStudentpost = async (req, res) => {
           });
 
           if (!getResponce) {
-              res
-                  .status(400)
-                  .json({ message: "successfully", status: false });
+            res.status(400).json({ message: "successfully", status: false });
           } else {
-              res.status(200).json({
-                  message: "successfully",
-                  data: getResponce,
-                  status: true,
-              });
+            res.status(200).json({
+              message: "successfully",
+              data: getResponce,
+              status: true,
+            });
           }
+
+
+        }else{
+          const getResponce = await Attendence.create( {
+            Student_List,
+            Student_Present,
+            Student_Absent,
+            UserId,
+            CourseId, 
+            Date 
+
+          });
+          if (!getResponce) {
+            res.status(400).json({ message: "successfully", status: false });
+          } else {
+            res.status(200).json({
+              message: "successfully",
+              data: getResponce,
+              status: true,
+            });
+          }
+
+        }
+         
       }
+
   } catch (error) {
       res.status(400).json({ message: error.message, status: false });
   }
@@ -66,7 +92,6 @@ const getAttendenceOfStuydent = async (req, res) => {
 };
 
 
-
 const CountOfStudentsAttendance = async(req,res) =>{
   try {
       const absent = await Attendence.find();
@@ -78,6 +103,7 @@ const CountOfStudentsAttendance = async(req,res) =>{
       
   }
 }
+
 
 
 const CountOfStudentsAttendancePresent = async(req,res) =>{
