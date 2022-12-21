@@ -2,7 +2,6 @@ const { encrypt, compare } = require('../services/crypto');
 const { sendMail } = require('../services/MAIL');
 const User = require('../models/user');
 
-
 const jwt = require("jsonwebtoken");
 const JWTkey = process.env.TOKEN_KEY;
 // const dotenv = require(')
@@ -15,17 +14,17 @@ const generateJwtToken = (user) => {
   });
 };
 
-
+//  signup-----
 const signUp = async (req, res) => {
   try {
-    const { Name, Email, password} = req.body;
+    const { Name, Email, password } = req.body;
 
     console.log(req.file)
     const path = req.file.originalname;
 
     if (!path) throw new Error('no  images file')
 
-    console.log(path)
+    console.log(path);
 
 
     let Existing = await User.findOne({ Email })
@@ -38,15 +37,15 @@ const signUp = async (req, res) => {
     const hashedPassword = await encrypt(password);
     const otpGenerated = Math.floor(100000 + Math.random() * 900000)
 
-
+    // if not existing than create new user....
     let newUser = await User.create({
       Name,
-     Email,
-      profile_photo:path,
+      Email,
+      profile_photo: path,
       password: hashedPassword,
       otp: otpGenerated,
     });
-
+    //  if unable to create new user than send mail and genrate an otp.
     if (!newUser) return res.status(400).json({
       message: 'Unable to create new user',
     });
@@ -153,21 +152,21 @@ const ChangeStatus = async (req, res) => {
 
 };
 
-const GetUser = async(req,res)=>{
+const GetUser = async (req, res) => {
   try {
     const getresponce = await User.find()
-    res.status(200).json({ message: "User Details", data: getresponce ,status:true})
-    
+    res.status(200).json({ message: "User Details", data: getresponce, status: true })
+
   } catch (error) {
-    res.status(403).json({message:error.message})
-    
+    res.status(403).json({ message: error.message })
+
   }
 }
 
 //Update usre
-const EditUserDetails = async(req,res)=>{
+const EditUserDetails = async (req, res) => {
   try {
-    const { Name, Email, password } =req.body;
+    const { Name, Email, password } = req.body;
 
     console.log(req.file)
     const path = req.file.originalname;
@@ -176,17 +175,17 @@ const EditUserDetails = async(req,res)=>{
 
     console.log(path)
 
-    const getresponce = await User.findOneAndUpdate({ _id: req.params.id }, 
-      { Name, Email, password, profile_photo:path})
+    const getresponce = await User.findOneAndUpdate({ _id: req.params.id },
+      { Name, Email, password, profile_photo: path })
 
-    res.status(200).json({ message: "User Details Updated Successfully", data: getresponce ,status:true})
-    
+    res.status(200).json({ message: "User Details Updated Successfully", data: getresponce, status: true })
+
   } catch (error) {
     res.status(403).json({ message: error.message })
   }
 }
 
-module.exports= {
+module.exports = {
   verify_OTP,
   login,
   signUp,
@@ -194,6 +193,6 @@ module.exports= {
   ChangeStatus,
   GetUser,
   EditUserDetails
-  
- 
+
+
 }
